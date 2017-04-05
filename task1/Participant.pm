@@ -26,6 +26,7 @@ sub stand() {
 sub displayHand() {
     my $participant = shift @_;
     my $count = 0;
+    print "#";
     for my $card ($participant->{"cards"})
     {
         print $card;
