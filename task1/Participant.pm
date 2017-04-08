@@ -4,42 +4,42 @@ package Participant;
 
 
 sub new {
-    my $class = shift @_;
+    my $self = shift @_;
     my $name = shift @_;
     my @cards = ();
-    return bless { 'name' => $name, 'cards' => @cards }, $class;
+    return bless { 'name' => $name, 'cards' => @cards }, $self;
 }
 
-sub hit() {
-    my $participant = shift @_;
+sub hit {
+    my $self = shift @_;
     my $card = shift @_;
-    push $participant->{"cards"}, $card
+    push $self->{"cards"}, $card
 }
 
-sub stand() {
-    my $participant = shift @_;
-    print $participant->{"name"}, " stand.\n";
-    return 1;
+sub stand {
+    my $self = shift @_;
+    print $self->{"name"}, " stand.\n";
+    return "stand";
 }
 
 
-sub displayHand() {
-    my $participant = shift @_;
+sub displayHand {
+    my $self = shift @_;
     my $count = 0;
     print "#";
-    for my $card ($participant->{"cards"})
+    for my $card ($self->{"cards"})
     {
         print $card;
         $count++;
-        print " " if $count < $participant->{"cards"};
+        print " " if $count < $self->{"cards"};
 
     };
 }
 
-sub getHandValue(){
-    my $participant = shift @_;
+sub getHandValue{
+    my $self = shift @_;
     my @handValue = (0, 0);
-    for my $card ($participant->{"cards"})
+    for my $card ($self->{"cards"})
     {
         if ($card eq 'A') {
             $handValue[0] += 1;
@@ -56,9 +56,22 @@ sub getHandValue(){
 }
 
 
-sub dropAllCards() {
-    my $participant = shift @_;
-    $participant->{"cards"} = ();
+sub dropAllCards {
+    my $self = shift @_;
+    $self->{"cards"} = ();
 
+}
+
+sub getSoftHandValue{
+    my $self = shift;
+    my @handValue = $self->getHandValue();
+    my $tempHandValue=$handValue[0];
+    my $aCount=$handValue[1];
+    while ($tempHandValue<21&&$aCount>0)
+    {
+        $tempHandValue+=10;
+        $aCount--;
+    }
+    return $tempHandValue;
 }
 return 1;
