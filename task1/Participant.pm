@@ -7,7 +7,7 @@ sub new {
     my $self = shift @_;
     my $name = shift @_;
     my @cards = ();
-    return bless { 'name' => $name, 'cards' => @cards }, $self;
+    return bless { 'name' => $name, 'cards' => \@cards }, $self;
 }
 
 sub hit {
@@ -27,7 +27,7 @@ sub displayHand {
     my $self = shift @_;
     my $count = 0;
     print "#";
-    for my $card ($self->{"cards"})
+    foreach my $card (@{$self->{"cards"}})
     {
         print $card;
         $count++;
@@ -39,7 +39,7 @@ sub displayHand {
 sub getHandValue{
     my $self = shift @_;
     my @handValue = (0, 0);
-    for my $card ($self->{"cards"})
+    foreach my $card (@{$self->{"cards"}})
     {
         if ($card eq 'A') {
             $handValue[0] += 1;

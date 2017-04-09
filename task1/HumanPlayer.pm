@@ -7,7 +7,7 @@ sub new {
     my $self = shift @_;
     my $name = shift @_;
     my $participant = $self->SUPER::new($name);
-    return $participant, $self;
+    return bless $participant, $self;
 }
 
 sub hitOrStand{
