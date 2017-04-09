@@ -1,3 +1,19 @@
+# CSCI3180 Principles of Programming Languages
+#
+# --- Declaration ---
+#
+# I declare that the assignment here submitted is original except for source
+# material explicitly acknowledged. I also acknowledge that I am aware of
+# University policy and regulations on honesty in academic work, and of the
+# disciplinary guidelines and procedures applicable to breaches of such policy
+# and regulations, as contained in the website
+# http://www.cuhk.edu.hk/policy/academichonesty/
+#
+# Assignment 3
+# Name : Ling Leong
+# Student ID : 1155062557
+# Email Addr : lling5@cse.cuhk.edu.hk
+
 package HumanPlayer;
 use strict;
 use warnings;
@@ -22,11 +38,11 @@ sub hitOrStand{
         $input = <STDIN>;
         chomp $input;
     }
-    if($input eq 'h'){
+    if ($input eq 'h') {
         return "hit";
-    }elsif($input eq 's'){
+    } elsif ($input eq 's') {
         return "stand";
-    }else{
+    } else {
         return "error";
     }
 
