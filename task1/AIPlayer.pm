@@ -12,10 +12,16 @@ sub new {
 }
 
 sub hitOrStand {
+    my $self = shift @_;
+    my @handValue = $self->getHandValue();
+    if ($handValue[0] < 17)
+    {
+        return "hit"
 
-    return "stand";
-
-
+    } else
+    {
+        return "stand"
+    }
 
 }
-1;
+return 1;

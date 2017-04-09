@@ -30,6 +30,7 @@ sub start{
         $player->setDealer($self);
         print "Player ", $player->{"name"}, "\n";
         print join( ', ', @{$player->{"cards"}} ), "\n";
+        $player->printTotalValue();
 
     }
 
@@ -37,39 +38,89 @@ sub start{
     $self->hit($self->{'deck'}->fetchOneCardFromTop());
     print "Dealer ", $self->{"name"}, "\n";
     print join( ', ', @{$self->{"cards"}} ), "\n";
+    $self->printTotalValue();
 
     foreach my $player (@{$self->{'players'}})
     {
-        print "Player ", $player->{"name"}, "'s Turn:\n";
+        print "**********Player ", $player->{"name"}, "'s Turn**********\n";
 
-        while ($player->hitOrStand() eq "hit")
+        if (!$player->is21())
         {
-            my $card = $self->{'deck'}->fetchOneCardFromTop();
-            $player->hit($card);
-            print $player->{"name"}, " received a card ",$card,"\n";
-            print "Cards in hand: ",join( ', ', @{$player->{"cards"}} ), "\n";
+            while ($player->hitOrStand() eq "hit")
+            {
+                my $card = $self->{'deck'}->fetchOneCardFromTop();
+                $player->hit($card);
+                print $player->{"name"}, " received a card ", $card, "\n";
+                print "Cards in hand: ", join( ', ', @{$player->{"cards"}} ), "\n";
+                $player->printTotalValue();
+                if ($player->is21()) {
+                    print "Reached 21!\n";
+                    last;
+                } elsif ($player->isBursted()) {
+                    print "Bursted!\n";
+                    last;
+                }
 
+            }
+        } else
+        {
+            print "Reached 21!\n";
 
         }
+        print $player->{"name"}, " chooses to stand.\n";
+        print "Cards in hand: ", join( ', ', @{$player->{"cards"}} ), "\n";
+        $player->printTotalValue();
 
     }
-    print "Dealer ", $self->{"name"}, "'s Turn:\n";
+    print "**********Dealer ", $self->{"name"}, "'s Turn**********\n";
 
     while ($self->hitOrStand() eq "hit")
     {
         my $card = $self->{'deck'}->fetchOneCardFromTop();
 
         $self->hit( $card);
-        print $self->{"name"}, " received a card ",$card,"\n";
-        print "Cards in hand: ",join( ', ', @{$self->{"cards"}} ), "\n";
-    }
+        print $self->{"name"}, " received a card ", $card, "\n";
+        print "Cards in hand: ", join( ', ', @{$self->{"cards"}} ), "\n";
+        $self->printTotalValue();
+        if ($self->is21()) {
+            print "Reached 21!\n";
+            last;
+        } elsif ($self->isBursted()) {
+            print "Bursted!\n";
+            last;
+        }
 
-    print "#";
+    }
+    print $self->{"name"}, " chooses to stand.\n";
+    print "Cards in hand: ", join( ', ', @{$self->{"cards"}} ), "\n";
+    $self->printTotalValue();
+
+    print "Final hand of everyone:\n";
 
     foreach my $player (@{$self->{'players'}})
     {
-        #       TODO: handle score compara
+        $player->displayHand();
     }
+    $self->displayHand();
+    print "Winner between the dealer and each player:\n";
+
+    my @winner = ();
+    foreach my $player (@{$self->{'players'}})
+    {
+        if (!$player->isBursted() && $self->isBursted()) {
+            push @winner, $player->{"name"};
+        } elsif (!$player->isBursted() && !$self->isBursted()
+            && $player->getBestHandValue() > $self->getBestHandValue())
+        {
+            push @winner, $player->{"name"};
+
+        } else
+        {
+            push @winner, $self->{"name"};
+        }
+    }
+    print "#";
+    print join( ' ', @winner );
     print "\n";
 }
 
@@ -81,8 +132,10 @@ sub reset{
         @{$player->{"cards"}} = ();
 
     }
+    @{$self->{"cards"}}=();
     my $deck = Deck->new();
-    $self->{"deck"} = $deck->shuffle();
+    $deck->shuffle();
+    $self->{"deck"} = $deck;
 
 }
 
@@ -91,7 +144,7 @@ sub hitOrStand(){
     my @handValue = $self->getHandValue();
     if ($handValue[0] < 17)
     {
-       return "hit"
+        return "hit"
 
     } else
     {
