@@ -33,7 +33,7 @@ sub hitOrStand{
     my $input = <STDIN>;
     chomp $input;
     while($input ne 'h' && $input ne 's'){
-        print BRIGHT_RED "Invalid input, please input again!\n";
+        print "Invalid input, please input again!\n";
         print  "Hit or stand: 'h' hit, 's' stand\n";
         $input = <STDIN>;
         chomp $input;

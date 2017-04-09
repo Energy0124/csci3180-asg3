@@ -18,6 +18,8 @@ package Player;
 use strict;
 use warnings;
 
+our $msg = "What a pity! Bonus sword attack is not invoked";
+
 sub new {
     my $self = shift @_;
     my $name = shift @_;
@@ -30,16 +32,24 @@ sub new {
 sub attackWithSword {
     my $self = shift @_;
     my $enemy = shift @_;
+    print "Attack With Sword!\n";
+
     $enemy->{"hp"} -= 800 - $enemy->{"dp"};
 }
 
 sub useBlackMagic{
+
     my $self = shift @_;
     my $enemy = shift @_;
+    print "Use BlackMagic!\n";
     $enemy->{"hp"} -= 600 - $enemy->{"dp"};
     my $rand = rand();
     if ($rand < 0.4) {
+        local $msg = "Bonus damage invoked!";
+        printLine();
         $enemy->{"hp"} -= 1000 - $enemy->{"dp"};
+    } else {
+        printLine();
     }
 }
 
@@ -60,5 +70,8 @@ sub displayInfo {
     print "DP: ", $self->{"dp"}, "\n";
 }
 
+sub printLine {
+    print $msg, "\n";
+}
 
 1;
